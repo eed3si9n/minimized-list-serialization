@@ -2,6 +2,7 @@ package issue
 
 import org.junit._
 import java.io.{ ObjectOutputStream, ObjectInputStream, ByteArrayOutputStream, ByteArrayInputStream }
+import scala.reflect.ClassTag
 
 class IssueTest {
   @Test
@@ -19,9 +20,9 @@ class IssueTest {
     o.toByteArray()
   }
 
-  def deserialize[A <: Serializable](bytes: Array[Byte]): A = {
+  def deserialize[A <: Serializable: ClassTag](bytes: Array[Byte]): A = {
     val s = new ByteArrayInputStream(bytes)
-    val is = new ObjectInputStream(s)
-    is.readObject().asInstanceOf[A]
+    val is = ScalaObjectInputStream[A](s)
+    is.readObject
   }
 }

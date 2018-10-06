@@ -13,6 +13,14 @@ class IssueTest {
     assert(obj == obj2)
   }
 
+  @Test
+  def testMyCollection: Unit = {
+    val list = List(1, 2, 3)
+    val arr = serialize(new MyCollection(list))
+    val obj2 = deserialize[MyCollection[Int]](arr)
+    assert(obj2.list == list)
+  }
+
   def serialize[A <: Serializable](obj: A): Array[Byte] = {
     val o = new ByteArrayOutputStream()
     val os = new ObjectOutputStream(o)
@@ -25,4 +33,9 @@ class IssueTest {
     val is = ScalaObjectInputStream[A](s)
     is.readObject
   }
+}
+
+class MyCollection[B](val list: List[B]) extends scala.collection.Iterable[B] {
+  override def iterator = list.iterator
+  // protected[this] override def writeReplace(): AnyRef = this
 }

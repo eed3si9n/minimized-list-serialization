@@ -1,16 +1,16 @@
 package issue
 
-import org.scalatest._
-import java.io.{ObjectOutputStream, ObjectInputStream, ByteArrayOutputStream, ByteArrayInputStream}
+import org.junit._
+import java.io.{ ObjectOutputStream, ObjectInputStream, ByteArrayOutputStream, ByteArrayInputStream }
 
-class IssueTest extends FunSuite with Matchers {
-  test("serialization issue") {
-    val obj = Issue("meh", List(Meh("2345")))
+class IssueTest {
+  @Test
+  def testSerialization: Unit = {
+    val obj = List(new Meh)
     val arr = serialize(obj)
-    val obj2 = deserialize(arr)
-    assert(obj === obj2)
+    val obj2 = deserialize[List[Meh]](arr)
+    assert(obj == obj2)
   }
-
 
   def serialize[A <: Serializable](obj: A): Array[Byte] = {
     val o = new ByteArrayOutputStream()
